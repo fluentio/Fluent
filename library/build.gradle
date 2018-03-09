@@ -3,8 +3,6 @@ apply plugin: 'com.android.library'
 android {
   compileSdkVersion 26
 
-
-
   defaultConfig {
     minSdkVersion 15
     targetSdkVersion 26
@@ -22,6 +20,10 @@ android {
     }
   }
 
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+  }
 }
 
 dependencies {
