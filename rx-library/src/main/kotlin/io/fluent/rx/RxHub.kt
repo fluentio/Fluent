@@ -1,5 +1,6 @@
 package io.fluent.rx
 
+import io.fluent.Hub
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -8,10 +9,12 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-open class RxHub {
+abstract class RxHub<in V> : Hub<V> {
   private val compositeDisposable = CompositeDisposable()
 
-  fun clearDisposables() = compositeDisposable.clear()
+  override fun disconnect() {
+    compositeDisposable.clear()
+  }
 
   fun Disposable.compose() = compositeDisposable.add(this)
 
