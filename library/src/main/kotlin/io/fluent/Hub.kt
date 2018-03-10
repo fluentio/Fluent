@@ -1,7 +1,7 @@
 package io.fluent
 
-interface Hub {
-  fun connect()
+interface Hub<in V> {
+  fun connect(view: V)
 
   fun disconnect()
 }
