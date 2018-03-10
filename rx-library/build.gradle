@@ -25,6 +25,10 @@ android {
   }
 }
 
+tasks.withType(Javadoc).all {
+  enabled = false
+}
+
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -40,3 +44,11 @@ dependencies {
   androidTestImplementation 'com.android.support.test:runner:1.0.1'
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
+ext {
+  libraryName = 'rx-library'
+  artifact = 'rx-library'
+}
+
+apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/install.gradle'
+apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/bintray.gradle'

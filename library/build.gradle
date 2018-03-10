@@ -1,4 +1,13 @@
 apply plugin: 'kotlin'
+apply plugin: 'com.jfrog.bintray'
+
+ext {
+  libraryName = 'library'
+  artifact = 'library'
+}
+
+apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/install.gradle'
+apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/bintray.gradle'
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
