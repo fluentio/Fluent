@@ -1,6 +1,6 @@
 package io.fluent
 
-sealed class Type {
+open class Type {
   object Initial : Type()
   object Loading : Type()
   object Success : Type()
