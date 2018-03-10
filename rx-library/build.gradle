@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka-android'
 
 android {
   compileSdkVersion 26
@@ -25,8 +27,9 @@ android {
   }
 }
 
-tasks.withType(Javadoc).all {
-  enabled = false
+dokka {
+  outputFormat = 'html'
+  outputDirectory = "$buildDir/javadoc"
 }
 
 dependencies {
@@ -48,7 +51,8 @@ dependencies {
 ext {
   libraryName = 'rx-library'
   artifact = 'rx-library'
+  libraryDescription = 'Reactive extensions for Fluent library'
 }
 
-apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/install.gradle'
-apply from: 'https://raw.githubusercontent.com/quangctkm9207/template-files/master/android/gradle/bintray.gradle'
+apply from: '../install.gradle'
+apply from: '../bintray.gradle'
