@@ -1,15 +1,11 @@
 apply plugin: 'kotlin'
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
-
   implementation project(':library')
-
   implementation "io.reactivex.rxjava2:rxjava:2.1.7"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
   testImplementation 'junit:junit:4.12'
-
-  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 ext {
