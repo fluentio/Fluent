@@ -1,5 +1,4 @@
 apply plugin: 'kotlin'
-apply plugin: 'com.jfrog.bintray'
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
