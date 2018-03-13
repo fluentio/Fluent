@@ -15,7 +15,7 @@ buildscript {
     siteUrl = 'https://github.com/fluentio'
     gitUrl = 'https://github.com/fluentio/Fluent.git'
 
-    libraryVersion = '0.2.0'
+    libraryVersion = '0.2.1'
 
     developerId = properties.getProperty("user.id")
     developerName = properties.getProperty("user.name")
