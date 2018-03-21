@@ -7,10 +7,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import io.reactivex.Single
 import javax.inject.Inject
 
-class GoogleLogin @Inject constructor(
+open class GoogleLogin @Inject constructor(
     private val activity: LoginActivity
 ) {
 
@@ -29,10 +28,8 @@ class GoogleLogin @Inject constructor(
     activity.startActivityForResult(googleSignInClient.signInIntent, GOOGLE_REQUEST)
   }
 
-  fun getAccountFromIntent(intent: Intent): Single<GoogleSignInAccount> {
-    return Single.fromCallable {
-      GoogleSignIn.getSignedInAccountFromIntent(intent).getResult(ApiException::class.java)
-    }
+  open fun getAccountFromIntent(intent: Intent): GoogleSignInAccount {
+    return GoogleSignIn.getSignedInAccountFromIntent(intent).getResult(ApiException::class.java)
   }
 
   companion object {
