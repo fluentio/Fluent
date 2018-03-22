@@ -10,9 +10,7 @@ class RequestGoogleLoginJob @Inject constructor(
 ) : RxJob<Unit>() {
 
   override fun bind(input: Unit): Completable {
-    return Completable.fromAction {
-      googleLogin.startActivityForResult()
-    }
+    return googleLogin.startActivityForResult()
   }
 
 }

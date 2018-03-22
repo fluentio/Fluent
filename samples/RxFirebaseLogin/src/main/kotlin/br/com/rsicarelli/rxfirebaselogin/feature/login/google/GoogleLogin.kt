@@ -7,6 +7,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import io.reactivex.Completable
 import javax.inject.Inject
 
 open class GoogleLogin @Inject constructor(
@@ -24,8 +25,10 @@ open class GoogleLogin @Inject constructor(
     GoogleSignIn.getClient(activity, gso)
   }
 
-  fun startActivityForResult() {
-    activity.startActivityForResult(googleSignInClient.signInIntent, GOOGLE_REQUEST)
+  open fun startActivityForResult(): Completable {
+    return Completable.fromAction {
+      activity.startActivityForResult(googleSignInClient.signInIntent, GOOGLE_REQUEST)
+    }
   }
 
   open fun getAccountFromIntent(intent: Intent): GoogleSignInAccount {
