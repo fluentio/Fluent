@@ -1,1 +1,1 @@
-include ':demo', ':library', ':rx-library', ':samples:RxFirebaseLogin'
+include ':library', ':rx-library', ':samples:RxFirebaseLogin'
