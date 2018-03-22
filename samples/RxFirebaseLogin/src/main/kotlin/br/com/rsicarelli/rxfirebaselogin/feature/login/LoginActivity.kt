@@ -2,6 +2,7 @@ package br.com.rsicarelli.rxfirebaselogin.feature.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import br.com.rsicarelli.rxfirebaselogin.R
 import com.jakewharton.rxbinding2.view.RxView
@@ -13,6 +14,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_login.googleSignIn
+import kotlinx.android.synthetic.main.activity_login.loading
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -58,10 +60,30 @@ class LoginActivity : DaggerAppCompatActivity(), LoginView {
   override fun bind(newState: LoginState) {
     when (newState.type) {
       StateType.Success -> success()
+      StateType.Error -> error()
+      StateType.Loading -> loading()
     }
   }
 
   private fun success() {
+    loading.gone()
     Toast.makeText(this, "It works", Toast.LENGTH_LONG).show()
+  }
+
+  private fun error() {
+    loading.gone()
+    Toast.makeText(this, "Something goes wrong! :(", Toast.LENGTH_LONG).show()
+  }
+
+  private fun loading() {
+    loading.show()
+  }
+
+  private fun View.show() {
+    this.visibility = View.VISIBLE
+  }
+
+  private fun View.gone() {
+    this.visibility = View.GONE
   }
 }

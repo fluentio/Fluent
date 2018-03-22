@@ -7,7 +7,6 @@ import io.fluent.StateType
 import io.fluent.rx.RxJob
 import io.fluent.rx.RxStore
 import io.reactivex.Completable
-import timber.log.Timber
 import javax.inject.Inject
 
 class DoGoogleLoginJob @Inject constructor(
@@ -17,9 +16,8 @@ class DoGoogleLoginJob @Inject constructor(
 
   override fun bind(input: Intent): Completable {
     return firebase.firebaseAuthWith(intent = input)
-        .doOnSuccess { Timber.d(it.email) }
+        .doOnSubscribe { store.update { setType(StateType.Loading) } }
         .doOnSuccess { store.update { setType(StateType.Success) } }
-        .doOnError { Timber.e(it) }
         .doOnError { store.update { setType(StateType.Error) } }
         .toCompletable()
         .onErrorComplete()
