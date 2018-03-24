@@ -14,14 +14,14 @@ open class RxStore<T : State>(initialState: T) : Store<T>{
   }
 
   @Synchronized
-  override fun update(newState: T) {
+  open override fun update(newState: T) {
     currentState = newState
   }
 
-  override fun state() = currentState
+  open override fun state() = currentState
 
   @Synchronized
-  fun update(block: T.() -> T) {
+  open fun update(block: T.() -> T) {
     currentState = state().block()
   }
 
