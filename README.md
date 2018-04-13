@@ -17,7 +17,7 @@ We recommend to define one `State` for each one of your screens.
 
 It holds just `type() : StateType` and can be inherit to fit your needs.
 
-### StateType
+#### StateType
 
 We already have some default kind of states, you can create your own type inheriting this class.
 The default states are: `Initial`, `Loading`, `Success` and `Error`
@@ -34,14 +34,19 @@ class LoginActivity : AppCompatActivity(), LoginView {
 }
 ```
 
+>See how to implement [with rx](#view---reactive-way) and [without rx](#view---non-reactive-way)
+
 ### Store
 
 It receives and manages all the possible states of a `View` so you don't need to worry, because we take care about statefulness and performance.
 
+>See how to implement [with rx](#rxstore) and [without rx](#store---non-reactive-way)
 
 ### Job
 
 A job is a little piece of work which might look like an atomic operation. It's the only place where you can generate new states and push them to the `Store`.
+
+>See how to implement [with rx](#rxjob) and [without rx](#job---non-reactive-way)
 
 ### Hub
 
@@ -51,24 +56,28 @@ You can combine and/or filter actions before perform the `Job` itself. It acts k
 
 We have already implemented the `disconnect()` method to release resources by disposing all the bound jobs.
 
----
+>See how to implement [with rx](#rxhub) and [without rx](#hub---non-reactive-way)
 
 
->For now ahed we can have two kind of approaches with this framework: A non reactive and a total reactive way.
+## Implementing in a non Reactive Way
 
+### View - Non Reactive Way
+`//TODO`
+Too be filled
 
-## Non reactive way
+### Store - Non Reactive Way
+`//TODO`
+Too be filled
 
-### View
+### Job - Non Reactive Way
+`//TODO`
+Too be filled
 
-### Store
+### Hub - Non Reactive Way
+`//TODO`
+Too be filled
 
-### Job
-
-### Hub
-
-
-## Reactive way
+## Implementing in a Reactive way
 
 We work with Reactive Extension to follow the Reactive Manifesto
 
