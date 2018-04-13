@@ -9,27 +9,53 @@ The main concepts in this architecture are : `State`, `View`, `Store`, `Job` and
 >![fluent diagram](https://image.ibb.co/cAXPhH/Screen_Shot_2018_04_11_at_12_09_41.png)
 ---
 
-## State
+## Concept Explanation
+
+### State
 
 We recommend to define one `State` for each one of your screens.
 
-It holds just `type() : StateType` and should be inherit to fit your needs. As the example above:
-
-```kotlin
-data class LoginState(val type: StateType = StateType.Initial) : State {
-  override fun type() = type
-  fun setType(newType: StateType) = copy(type = newType)
-}
-```
+It holds just `type() : StateType` and can be inherit to fit your needs.
 
 ### StateType
 
 We already have some default kind of states, you can create your own type inheriting this class.
 The default states are: `Initial`, `Loading`, `Success` and `Error`
 
+### View
+
+That's the reference to your screen itself, you should create your kind of `View` that has specific `State` attached.
+
+Your `Activity` or `Fragment` needs to implement `View`
+
+```kotlin
+class LoginActivity : AppCompatActivity(), LoginView {
+    override fun bind(newState: LoginState) { ... }
+}
+```
+
+### Store
+
+It receives and manages all the possible states of a `View` so you don't need to worry, because we take care about statefulness and performance.
+
+
+### Job
+
+A job is a little piece of work which might look like an atomic operation. It's the only place where you can generate new states and push them to the `Store`.
+
+### Hub
+
+The `Hub` is maybe the most important and disruptive layer of this framework. It is responsible to `connect()` the `View` and the `Job`'s layers.
+
+You can combine and/or filter actions before perform the `Job` itself. It acts kind like a bridge binding user actions with the use cases. 
+
+We have already implemented the `disconnect()` method to release resources by disposing all the bound jobs.
+
 ---
 
+
 >For now ahed we can have two kind of approaches with this framework: A non reactive and a total reactive way.
+
 
 ## Non reactive way
 
@@ -46,9 +72,9 @@ The default states are: `Initial`, `Loading`, `Success` and `Error`
 
 We work with Reactive Extension to follow the Reactive Manifesto
 
-### View
+### View - Reactive Way
 
-That's the reference to your screen itself, you should create your kind of `View` that has specific `State` attached. 
+Stay aware to think in a way to declare all the user's actions and screen's actions related as `Observable`.
 
 ```kotlin
 interface LoginView : View<LoginState> {
@@ -57,27 +83,14 @@ interface LoginView : View<LoginState> {
 }
 ```
 
-> Stay aware to think in a way to declare all the user's actions and screen's actions related as `Observable`.
-
-Your `Activity` or `Fragment` needs to implement `View`
-
-```kotlin
-class LoginActivity : AppCompatActivity(), LoginView {
-    override fun bind(newState: LoginState) { ... }
-}
-```
-
 ### RxStore
-
-It receives and manages all the possible states of a `View` so you don't need to worry, because we take care about statefulness and performance.
+> `RxStore` is an implementation of `Store` that works with Reactive Extensions
 
 To create one you just need to pass an `State` class as parameter and define the related initial state:
 
 ```kotlin
 RxStore(LoginState(StateType.Initial))
 ```
-
-> `RxStore` is an implementation of `Store` that works with Reactive Extensions
 
 The stream created by it can be handled inside the `View` implementation.
 
@@ -102,10 +115,9 @@ override fun bind(newState: LoginState) {
 
 
 ### RxJob
+> `RxJob` is an implementation of `Job` that works with Reactive Extensions
 
-Small units of work separated from the other layers and that warns the `RxStore` layer when the job is finished successfully or not.
-
-Just need to inherit your use case class from `RxJob` (specifying the kind of return of this job) and override the `run(input: T)` method with the properly work.  As it is returns a `Completable` you should handle the possible returns on the `RxStore` subscription, with `doOnSubscribe`, `doOnSuccess` and `doOnError` as shown in the next example:
+Just need to inherit your use case class from `RxJob` (specifying the kind of return of this job) and override the `bind(input: T):Completable` method with the properly work.  As it is returns a `Completable` you should handle the possible returns on the `RxStore` subscription, with `doOnSubscribe`, `doOnSuccess` and `doOnError` as shown in the next example:
 
 ```kotlin
 class DoGoogleLoginJob @Inject constructor(
@@ -123,17 +135,14 @@ class DoGoogleLoginJob @Inject constructor(
 }
 ```
 
-> `RxJob` is an implementation of `Job` that works with Reactive Extensions
-
 > In this example we are injecting the local parameters `store` and `firebase` with [dagger](https://github.com/google/dagger) we strong recommend that.
 
 ### RxHub
+> `RxHub` is an implementation of `Hub` that works with Reactive Extensions
 
-The hub is maybe the most important and disruptive layer of this framework. It is responsible to connect the `View` and the `Job`'s layers through the operator `bind(job: RxJob<T>)`(that's why all of your `View`'s methods needs to return an `Observable`).
+You connect the `View` and the `RxJob`'s layers through the operator `bind(job: RxJob<T>)`(that's why all of your `View`'s methods needs to return an `Observable`).
 
-You can combine and/or filter actions before perform the `Job` itself. It acts kind like a bridge binding user actions with the use cases. 
-
-Just need to inherit the class `RxHub<T>`(specifying the `View` it will connect with) and override the `connect(view: T)` method with the binds to `RxJobs` you need.
+After that just need to inherit the class `RxHub<T>`(specifying the `View` it will connect with) and override the `connect(view: T)` method with the binds to `RxJobs` you need.
 
 ```kotlin
 class LoginHub @Inject constructor(
@@ -171,8 +180,6 @@ override fun onDestroy() {
     hub.disconnect()
 }
 ```
-
-> `RxHub` is an implementation of `Hub` that works with Reactive Extensions
 
 ---
 
