@@ -54,8 +54,6 @@ The `Hub` is maybe the most important and disruptive layer of this framework. It
 
 You can combine and/or filter actions before perform the `Job` itself. It acts kind like a bridge binding user actions with the use cases. 
 
-We have already implemented the `disconnect()` method to release resources by disposing all the bound jobs.
-
 >See how to implement [with rx](#rxhub) and [without rx](#hub---non-reactive-way)
 
 
@@ -126,7 +124,12 @@ override fun bind(newState: LoginState) {
 ### RxJob
 > `RxJob` is an implementation of `Job` that works with Reactive Extensions
 
-Just need to inherit your use case class from `RxJob` (specifying the kind of return of this job) and override the `bind(input: T):Completable` method with the properly work.  As it is returns a `Completable` you should handle the possible returns on the `RxStore` subscription, with `doOnSubscribe`, `doOnSuccess` and `doOnError` as shown in the next example:
+
+You just need to inherit your use case class from `RxJob` (specifying the type of the input parameter) and override the `bind(input: T):Completable` method with the properly work.
+
+>You must handle all the possible edge cases into your job. You should not allow your job to throw an exception back to the `Hub`.
+
+As it is returns a `Completable` you should handle the possible returns on the `RxStore` subscription, with `doOnSubscribe`, `doOnSuccess` and `doOnError` as shown in the next example:
 
 ```kotlin
 class DoGoogleLoginJob @Inject constructor(
@@ -153,6 +156,8 @@ You connect the `View` and the `RxJob`'s layers through the operator `bind(job: 
 
 After that just need to inherit the class `RxHub<T>`(specifying the `View` it will connect with) and override the `connect(view: T)` method with the binds to `RxJobs` you need.
 
+We have already implemented the `disconnect()` method to release resources by disposing all the bound jobs.
+
 ```kotlin
 class LoginHub @Inject constructor(
     private val doGoogleLoginJob: RxJob<Intent>,
@@ -170,17 +175,14 @@ class LoginHub @Inject constructor(
 }
 ```
 
-And finally that's how you connect or disconnect your `View` to the `Hub`
+And finally that's how you connect and disconnect your `View` to the `Hub`
 
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_login)
 
-    store.stateChanges()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { bind(it) }
-
+    ...
     hub.connect(this)
 }
 
