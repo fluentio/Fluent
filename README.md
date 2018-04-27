@@ -9,6 +9,27 @@ The main concepts in this architecture are: `State`, `View`, `Store`, `Job` and 
 >![fluent diagram](https://image.ibb.co/cAXPhH/Screen_Shot_2018_04_11_at_12_09_41.png)
 ---
 
+## Download
+
+You have to add Fluent maven repository to your project
+```
+allprojects {
+  repositories {
+    google()
+    jcenter()
+    maven { url  "http://dl.bintray.com/fluentio/maven" }
+  }
+}
+```
+
+
+Then you'll be able to download Fluent dependencies
+```
+implementation "io.fluent:library:0.2.0"
+implementation "io.fluent:rx-library:0.2.0"
+```
+
+
 ## Concept Explanation
 
 ### View
