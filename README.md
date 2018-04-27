@@ -12,21 +12,21 @@ The main concepts in this architecture are: `State`, `View`, `Store`, `Job` and 
 ## Download
 
 You have to add Fluent maven repository to your project
-```
+```groovy
 allprojects {
   repositories {
     google()
     jcenter()
-    maven { url  "http://dl.bintray.com/fluentio/maven" }
+    maven { url  'http://dl.bintray.com/fluentio/maven' }
   }
 }
 ```
 
 
 Then you'll be able to download Fluent dependencies
-```
-implementation "io.fluent:library:0.2.0"
-implementation "io.fluent:rx-library:0.2.0"
+```groovy
+implementation 'io.fluent:library:0.2.0'
+implementation 'io.fluent:rx-library:0.2.0'
 ```
 
 
